@@ -64,31 +64,83 @@ class LinkedList:
             current = current.next
         print("None")
 
+    def reverse(self):
+        """Реверсування списку."""
+        prev = None
+        current = self.head
+        while current:
+            next_node = current.next
+            current.next = prev
+            prev = current
+            current = next_node
+        self.head = prev
+
+    def sort(self):
+        """Сортування списку методом bubble sort."""
+        if self.head is None:
+            return
+        swapped = True
+        while swapped:
+            swapped = False
+            current = self.head
+            while current.next:
+                if current.data > current.next.data:
+                    current.data, current.next.data = current.next.data, current.data
+                    swapped = True
+                current = current.next
+
+    @staticmethod
+    def merge_sorted_lists(list1, list2):
+        """Об’єднання двох відсортованих списків."""
+        dummy = Node(0)
+        tail = dummy
+        a, b = list1.head, list2.head
+
+        while a and b:
+            if a.data <= b.data:
+                tail.next = a
+                a = a.next
+            else:
+                tail.next = b
+                b = b.next
+            tail = tail.next
+
+        tail.next = a if a else b
+        merged_list = LinkedList()
+        merged_list.head = dummy.next
+        return merged_list
+
 
 if __name__ == "__main__":
     llist = LinkedList()
-
-    # Вставляємо вузли в початок
-    llist.insert_at_beginning(5)
-    llist.insert_at_beginning(10)
-    llist.insert_at_beginning(15)
-
-    # Вставляємо вузли в кінець
+    llist.insert_at_end(30)
+    llist.insert_at_end(10)
     llist.insert_at_end(20)
-    llist.insert_at_end(25)
 
-    
-    print("Зв'язний список:")
+    print("Початковий список:")
     llist.print_list()
 
-    # Видаляємо вузол
-    llist.delete_node(10)
-
-    print("\nЗв'язний список після видалення вузла з даними 10:")
+    # Сортування
+    llist.sort()
+    print("\nВідсортований список:")
     llist.print_list()
 
-    # Пошук елемента у зв'язному списку
-    print("\nШукаємо елемент 15:")
-    element = llist.search_element(15)
-    if element:
-        print(element.data)
+    # Реверсування
+    llist.reverse()
+    print("\nРеверсований список:")
+    llist.print_list()
+
+    # Об’єднання двох відсортованих списків
+    llist1 = LinkedList()
+    llist1.insert_at_end(1)
+    llist1.insert_at_end(3)
+    llist1.insert_at_end(5)
+
+    llist2 = LinkedList()
+    llist2.insert_at_end(2)
+    llist2.insert_at_end(4)
+    llist2.insert_at_end(6)
+
+    merged = LinkedList.merge_sorted_lists(llist1, llist2)
+    print("\nОб’єднаний відсортований список:")
+    merged.print_list()
